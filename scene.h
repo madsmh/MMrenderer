@@ -26,6 +26,18 @@
 
 #include "camera.h"
 #include "solid.h"
+#include "material.h"
+
+struct hit_record {
+    double t;
+    double u;
+    double v;
+    Vector3 p;
+    Vector3 normal;
+    material *mat_ptr;
+
+
+};
 
 class scene {
 
@@ -42,7 +54,7 @@ public:
     // Utility functions
     void movePrimeCamera(Vector3 new_position);
     void moveAllCameras(std::vector<Vector3> new_positions);
-    void moveObjects(std::<Vector3> new_positions);
+    void moveObjects(std::vector<Vector3> new_positions);
 
     void callculateHits();
     void render();

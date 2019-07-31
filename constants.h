@@ -17,20 +17,11 @@
  *
  * */
 
-#ifndef MMRENDERER_CAMERA_H
-#define MMRENDERER_CAMERA_H
+#ifndef MMRENDERER_CONSTANTS_H
+#define MMRENDERER_CONSTANTS_H
 
-#include "constants.h"
-#include "vector3.h"
+#include <boost/math/constants/constants.hpp>
 
-class camera {
+const double PI = boost::math::constants::pi<double>();
 
-    Vector3 m_position; // Camera position
-    Vector3 m_direction; // Camera orientation (normalized)
-    double aspect;
-    double focal_length;
-
-};
-
-
-#endif //MMRENDERER_CAMERA_H
+#endif //MMRENDERER_CONSTANTS_H

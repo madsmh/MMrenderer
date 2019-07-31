@@ -17,20 +17,13 @@
  *
  * */
 
-#ifndef MMRENDERER_CAMERA_H
-#define MMRENDERER_CAMERA_H
+#ifndef MMRENDERER_MATERIAL_H
+#define MMRENDERER_MATERIAL_H
 
-#include "constants.h"
-#include "vector3.h"
 
-class camera {
-
-    Vector3 m_position; // Camera position
-    Vector3 m_direction; // Camera orientation (normalized)
-    double aspect;
-    double focal_length;
+class material {
 
 };
 
 
-#endif //MMRENDERER_CAMERA_H
+#endif //MMRENDERER_MATERIAL_H
