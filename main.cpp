@@ -19,8 +19,15 @@
 
 
 #include <iostream>
+#include "vector3.h"
 
 int main() {
     std::cout << "Hello, World!" << std::endl;
+    Vector3 p(1.0, 2.0, 3.0);
+    Vector3 q(2.0, 3.0, 4.0);
+    std::cout << "p=" << p << " , q=" << q << std::endl;
+    std::cout << "dot(p,q)  =" << dot(p,q) << std::endl;
+    std::cout << "cross(p,q)=" << cross(p,q) << std::endl;
     return 0;
 }
+
