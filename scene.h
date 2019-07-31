@@ -56,7 +56,7 @@ public:
     void moveAllCameras(std::vector<Vector3> new_positions);
     void moveObjects(std::vector<Vector3> new_positions);
 
-    void callculateHits();
+    void calculateHits();
     void render();
 };
 
