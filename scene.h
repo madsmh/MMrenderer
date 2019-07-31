@@ -48,7 +48,13 @@ class scene {
 
 public:
     //Constructors
-    scene(std::vector<camera> camera_list, std::vector<solid> object_list);
+    scene(std::vector<camera> camera_list, std::vector<solid> object_list){
+
+        m_cam_list = camera_list;
+        m_object_list = object_list;
+    };
+
+
     scene(camera c, std::vector<solid> object_list);
 
     // Utility functions
