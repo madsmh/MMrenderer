@@ -21,8 +21,21 @@
 #define MMRENDERER_RAY_H
 
 
-class ray {
+#include "vector3.h"
 
+class ray {
+    Vector3 m_origin, m_direction;
+    double m_time;
+
+public:
+    ray(const Vector3 origin, const Vector3 direction, double time = 0.0){
+        m_origin = origin, m_direction = direction, m_time = time;
+    }
+
+    Vector3 origin() const { return  m_origin;}
+    Vector3 direction() const  { return m_direction;}
+    Vector3 ptAtParam (double t) const { return m_origin + t * m_direction;}
+    double time() const  {return m_time;}
 };
 
 
