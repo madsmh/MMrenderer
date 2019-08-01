@@ -21,6 +21,17 @@ class Camera {
             return Ray(m_camera, screen_pos - m_camera);
         } // get_ray
 
+        void move(const Vector3& delta) {
+            m_camera            += delta;
+            m_lower_left_corner += delta;
+        } // move
+
+        std::string to_string() const {
+            return std::to_string(m_camera[0]).substr(0,4) + " " +
+                   std::to_string(m_camera[1]).substr(0,4) + " " +
+                   std::to_string(m_camera[2]).substr(0,4);
+        } // to_string
+
     private:
         // Position of camera.
         Vector3 m_camera;

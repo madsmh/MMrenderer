@@ -8,3 +8,7 @@ INCLUDE_DIRECTORIES( ${Boost_INCLUDE_DIR} )
 
 add_executable(MMrenderer main.cpp object.h ray.h scene.h sphere.h vector3.h camera.h )
 
+find_package(Gosu REQUIRED development)
+include_directories(${GOSU_INCLUDE_DIRS})
+target_link_libraries(MMrenderer ${GOSU_LIBRARIES})
+
