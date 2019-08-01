@@ -17,14 +17,9 @@ const Vector3 color_red   = Vector3(1.0, 0.0, 0.0);
 Vector3 randomUnitVector(){
     Vector3 temp;
 
-    std::random_device rd;
-    std::mt19937 e2(rd());
-
-    std::uniform_real_distribution<> dist(0, 1);
-
-    temp = Vector3(std::round(dist(e2)), std::round(dist(e2)), std::round(dist(e2)));
-    temp.normalize();
-
+    do {
+        temp = 2.0*Vector3(drand48(), drand48(), drand48()) - Vector3(1.0, 1.0, 1.0);
+    } while (temp.norm2()>= 1.0);
     return temp;
 }
 
@@ -41,7 +36,7 @@ Vector3 color(const Ray& ray, const Scene& scene) {
         Vector3 target = rec.point + rec.normal+randomUnitVector();
         // The normal vector has all components in the interval [-1, 1]
         // Convert linearly to vector where all components are in the interval [0, 1]
-        return rec.surface_settings.getDiffuse() * color( ray( rec.point, target - rec.point), scene);
+        return 0.5 * color( Ray( rec.point, target - rec.point), scene);
     } else {
         // The ray did not hit an object, so simulate a sky, based on the y-coordinate
         // of the rays direction.
@@ -68,8 +63,8 @@ Scene read_scene_from_file(std::string file_name) {
 
 int main() {
     // Size of final image in pixels.
-    int nx = 200;
-    int ny = 100;
+    int nx = 600;
+    int ny = 300;
     std::cout << "P3\n" << nx << " " << ny << "\n255\n";
 
     // Number of random samples for each pixel.
