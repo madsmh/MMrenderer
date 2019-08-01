@@ -1,8 +1,10 @@
 #include <iostream>
+#include <stdlib.h>
 #include "vector3.h"
 #include "ray.h"
 #include "scene.h"
 #include "sphere.h"
+#include "camera.h"
 
 // Define some convenient constants
 const Vector3 color_white = Vector3(1.0, 1.0, 1.0);
@@ -38,13 +40,11 @@ int main() {
     int ny = 100;
     std::cout << "P3\n" << nx << " " << ny << "\n255\n";
 
-    // Define the viewing screen
-    Vector3 lower_left_corner(-2.0, -1.0, -1.0);
-    Vector3 horizontal(4.0, 0.0, 0.0);
-    Vector3 vertical(0.0, 2.0, 0.0);
+    // Number of random samples for each pixel.
+    int ns = 100;   
 
-    // Defines the position of the camera
-    Vector3 camera(0.0, 0.0, 0.0);
+    // Holds position of the camera and the viewing screen.
+    Camera camera;
 
     // Define the scene with all the objects
     // Note: Negative values of z correspond to objects in front of the camera, whereas
@@ -56,19 +56,23 @@ int main() {
     scene.push_back(new Sphere(Vector3(0.0, -100.5, -1.0), 100.0));
 
     // Loop over all pixels of the image
-    for (int j = ny-1; j >= 0; j--) {
-        for (int i = 0; i < nx; i++) {
+    for (int y = ny-1; y >= 0; y--) {
+        for (int x = 0; x < nx; x++) {
 
-            // Calculate a position on the viewing screen.
-            float u = float(i) / float(nx);
-            float v = float(j) / float(ny);
-            Vector3 screen_pos(lower_left_corner + u*horizontal + v*vertical);
+            // Anti-aliasing: Calculate an average over many almost-identical
+            // rays.
+            Vector3 col(0.0, 0.0, 0.0);
+            for (int s=0; s<ns; s++) {
 
-            // Calculate a ray from the camera through the position on the viewing screen.
-            Ray ray(camera, screen_pos);
+                // Calculate a ray corresponding to random point within this pixel.
+                float u = float(x + drand48()) / float(nx);
+                float v = float(y + drand48()) / float(ny);
+                Ray ray = camera.get_ray(u, v);
 
-            // Calculate the colour of this particular pixel
-            Vector3 col = color(ray, scene);
+                // Calculate the colour of this particular pixel.
+                col += color(ray, scene);
+            }
+            col /= float(ns);
 
             // Write colour to output.
             int ir = int(255.99*col[0]);
