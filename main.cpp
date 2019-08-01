@@ -1,7 +1,8 @@
 #include <iostream>
 #include <fstream>
 #include <string>
-#include <stdlib.h>
+#include <cstdlib>
+#include <random>
 #include "vector3.h"
 #include "ray.h"
 #include "scene.h"
@@ -13,6 +14,21 @@ const Vector3 color_white = Vector3(1.0, 1.0, 1.0);
 const Vector3 color_blue  = Vector3(0.5, 0.7, 1.0);
 const Vector3 color_red   = Vector3(1.0, 0.0, 0.0);
 
+Vector3 randomUnitVector(){
+    Vector3 temp;
+
+    std::random_device rd;
+    std::mt19937 e2(rd());
+
+    std::uniform_real_distribution<> dist(0, 1);
+
+    temp = Vector3(std::round(dist(e2)), std::round(dist(e2)), std::round(dist(e2)));
+    temp.normalize();
+
+    return temp;
+}
+
+
 // Calculates the color associated with this particular ray.
 Vector3 color(const Ray& ray, const Scene& scene) {
     hit_record rec;
@@ -22,9 +38,10 @@ Vector3 color(const Ray& ray, const Scene& scene) {
     float t_max = MAXFLOAT;
 
     if (scene.hit(ray, t_min, t_max, rec)) {
+        Vector3 target = rec.point + rec.normal+randomUnitVector();
         // The normal vector has all components in the interval [-1, 1]
         // Convert linearly to vector where all components are in the interval [0, 1]
-        return 0.5*(rec.normal + Vector3(1.0, 1.0, 1.0));
+        return rec.surface_settings.getDiffuse() * color( ray( rec.point, target - rec.point), scene);
     } else {
         // The ray did not hit an object, so simulate a sky, based on the y-coordinate
         // of the rays direction.
