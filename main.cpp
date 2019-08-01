@@ -1,4 +1,6 @@
 #include <iostream>
+#include <fstream>
+#include <string>
 #include <stdlib.h>
 #include "vector3.h"
 #include "ray.h"
@@ -34,6 +36,19 @@ Vector3 color(const Ray& ray, const Scene& scene) {
 } // color
 
 
+Scene read_scene_from_file(std::string file_name) {
+    Scene         scene;
+    Vector3       center;
+    float         radius;
+
+    std::ifstream file(file_name);
+    while (file >> center >> radius) {
+        scene.push_back(new Sphere(center, radius));
+    }
+    return scene;
+} // read_scene_from_file
+
+
 int main() {
     // Size of final image in pixels.
     int nx = 200;
@@ -47,13 +62,7 @@ int main() {
     Camera camera;
 
     // Define the scene with all the objects
-    // Note: Negative values of z correspond to objects in front of the camera, whereas
-    // positive z-values are behind the camera.
-    // This is because the x,y,z coordinate system must be a regular right-haned coordinate system.
-    Scene scene;
-    //                                 x       y     z       r
-    scene.push_back(new Sphere(Vector3(0.0,    0.0, -1.0),   0.5));
-    scene.push_back(new Sphere(Vector3(0.0, -100.5, -1.0), 100.0));
+    Scene scene = read_scene_from_file("scene.txt");
 
     // Loop over all pixels of the image
     for (int y = ny-1; y >= 0; y--) {

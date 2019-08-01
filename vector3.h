@@ -46,6 +46,7 @@ class Vector3 {
     }
 
     inline double operator[](int i) const { return m_coords[i];}
+    inline double& operator[](int i) { return m_coords[i];}
 
     inline void normalize() {
         double k = 1.0/norm();
@@ -113,8 +114,13 @@ class Vector3 {
         return lhs /= rhs;
     }
 
-    inline friend std::ostream& operator << (std::ostream &os, const Vector3& rhs) {
+    inline friend std::ostream& operator << (std::ostream& os, const Vector3& rhs) {
         return os << "(" << rhs[0] << ", " << rhs[1] << ", " << rhs[2] << ")";
+    }
+
+    inline friend std::istream& operator >> (std::istream& is, Vector3& rhs) {
+        is >> rhs[0] >> rhs[1] >> rhs[2];
+        return is;
     }
 
     inline friend Vector3 cross(const Vector3& lhs, const Vector3& rhs) {
