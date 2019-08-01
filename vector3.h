@@ -94,7 +94,7 @@ class Vector3 {
         return rhs *= lhs;
     }
 
-    inline friend Vector3 operator * (const Vector3& lhs, const Vector3& rhs){
+    inline friend Vector3 operator * (const Vector3& lhs, const Vector3& rhs) {
         double x = lhs[0]*rhs[0];
         double y = lhs[1]*rhs[1];
         double z = lhs[2]*rhs[2];
@@ -117,14 +117,14 @@ class Vector3 {
         return os << "(" << rhs[0] << ", " << rhs[1] << ", " << rhs[2] << ")";
     }
 
-    inline friend Vector3 cross (const Vector3& lhs, const Vector3& rhs){
+    inline friend Vector3 cross(const Vector3& lhs, const Vector3& rhs) {
         double x = lhs[1]*rhs[2] - lhs[2]*rhs[1];
         double y = lhs[2]*rhs[0] - lhs[0]*rhs[2];
         double z = lhs[0]*rhs[1] - lhs[1]*rhs[0];
         return Vector3(x, y, z);
     }
 
-    inline friend double dot (const Vector3& lhs, const Vector3& rhs){
+    inline friend double dot(const Vector3& lhs, const Vector3& rhs) {
         return lhs[0]*rhs[0]+lhs[1]*rhs[1]+lhs[2]*rhs[2];
     }
 
