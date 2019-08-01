@@ -127,5 +127,10 @@ class Vector3 {
     inline friend double dot (const Vector3& lhs, const Vector3& rhs){
         return lhs[0]*rhs[0]+lhs[1]*rhs[1]+lhs[2]*rhs[2];
     }
+
+    inline friend Vector3 unit_vector(const Vector3& arg) {
+        return arg / arg.norm();
+    }
+
 }; // class Vector3
 
