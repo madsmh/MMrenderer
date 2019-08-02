@@ -21,7 +21,7 @@ class surface {
 protected:
     Vector3 m_attenuation;
 public:
-    virtual bool scatter(const Ray& ray_in, const hit_record& record, Vector3 attenuation, Ray& scattered);
+    virtual bool scatter(const Ray& ray_in, const hit_record& record, Vector3 attenuation, Ray& scattered) {};
 
 };
 
@@ -37,7 +37,7 @@ public:
     // and furthermore if the intersection happens for parameters t in the range
     // [t_min, t_max].
     // If a hit occurs, the structure rec is updated with information about the intersection.
-    virtual bool hit(const Ray& ray, float t_min, float t_max, hit_record& rec) const;
+    virtual bool hit(const Ray& ray, float t_min, float t_max, hit_record& rec) const {};
 
 }; // class Object
 

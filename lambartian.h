@@ -29,7 +29,6 @@ public:
         scattered = Ray(rec.point, target-rec.point);
 
         m_attenuation = attenuation;
-
         return true;
     }
 
