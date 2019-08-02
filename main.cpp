@@ -48,10 +48,16 @@ Scene read_scene_from_file(std::string file_name) {
     Scene         scene;
     Vector3       center;
     float         radius;
+    std::string material;
 
     std::ifstream file(file_name);
-    while (file >> center >> radius) {
-        scene.push_back(new Sphere(center, radius, new metal(Vector3(0.5, 0.5, 0.5))));
+    while (file >> center >> radius >> material) {
+        if (material == "diffuse"){
+            scene.push_back(new Sphere(center, radius, new lambartian(Vector3(0.5, 0.5, 0.5))));
+        } else if (material == "metal"){
+            scene.push_back(new Sphere(center, radius, new metal(Vector3(0.5, 0.5, 0.5))));
+        }
+
     }
     return scene;
 } // read_scene_from_file
@@ -59,8 +65,8 @@ Scene read_scene_from_file(std::string file_name) {
 
 int main() {
     // Size of final image in pixels.
-    int nx = 600;
-    int ny = 300;
+    int nx = 800;
+    int ny = 400;
     std::cout << "P3\n" << nx << " " << ny << "\n255\n";
 
     // Number of random samples for each pixel.
