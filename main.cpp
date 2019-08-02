@@ -8,7 +8,7 @@
 #include "scene.h"
 #include "sphere.h"
 #include "camera.h"
-#include "lambartian.h"
+#include "surfaces.h"
 
 // Define some convenient constants
 const Vector3 color_white = Vector3(1.0, 1.0, 1.0);
@@ -23,7 +23,7 @@ Vector3 color(const Ray &ray, const Scene& scene, int depth) {
     hit_record rec;
 
     // We only want positive parameters t, i.e. intersection in front of the camera.
-    float t_min = 0.0;
+    float t_min = 0.001;
     float t_max = MAXFLOAT;
     Vector3 attenuation;
     Ray scattered;
@@ -51,7 +51,7 @@ Scene read_scene_from_file(std::string file_name) {
 
     std::ifstream file(file_name);
     while (file >> center >> radius) {
-        scene.push_back(new Sphere(center, radius, new lambartian(Vector3(0.5, 0.5, 0.5))));
+        scene.push_back(new Sphere(center, radius, new metal(Vector3(0.5, 0.5, 0.5))));
     }
     return scene;
 } // read_scene_from_file
