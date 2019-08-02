@@ -8,40 +8,36 @@
 #include "scene.h"
 #include "sphere.h"
 #include "camera.h"
+#include "lambartian.h"
 
 // Define some convenient constants
 const Vector3 color_white = Vector3(1.0, 1.0, 1.0);
 const Vector3 color_blue  = Vector3(0.5, 0.7, 1.0);
 const Vector3 color_red   = Vector3(1.0, 0.0, 0.0);
 
-Vector3 randomUnitVector(){
-    Vector3 temp;
 
-    do {
-        temp = 2.0*Vector3(drand48(), drand48(), drand48()) - Vector3(1.0, 1.0, 1.0);
-    } while (temp.norm2()>= 1.0);
-    return temp;
-}
 
 
 // Calculates the color associated with this particular ray.
-Vector3 color(const Ray& ray, const Scene& scene) {
+Vector3 color(const Ray &ray, const Scene& scene, int depth=0) {
     hit_record rec;
 
     // We only want positive parameters t, i.e. intersection in front of the camera.
     float t_min = 0.0;
     float t_max = MAXFLOAT;
+    Vector3 attenuation;
+    Ray scattered;
 
     if (scene.hit(ray, t_min, t_max, rec)) {
-        Vector3 target = rec.point + rec.normal+randomUnitVector();
-        // The normal vector has all components in the interval [-1, 1]
-        // Convert linearly to vector where all components are in the interval [0, 1]
-        return 0.5 * color( Ray( rec.point, target - rec.point), scene);
+        if (depth < 50 && rec.surface_ptr->scatter(ray, rec, attenuation, scattered)){
+            return attenuation*color(scattered, scene, depth+1);
+        } else { return  Vector3(0.0, 0.0, 0.0);}
+
     } else {
         // The ray did not hit an object, so simulate a sky, based on the y-coordinate
         // of the rays direction.
         Vector3 unit_direction = unit_vector(ray.direction());
-        float t = 0.5*(unit_direction.y() + 1.0); // t is in the range [0,1]
+        float t = 0.8*(unit_direction.y() + 1.0); // t is in the range [0,1]
         // Linearly blend between white and blue
         return (1.0-t)*color_white + t*color_blue;
     }
@@ -55,7 +51,7 @@ Scene read_scene_from_file(std::string file_name) {
 
     std::ifstream file(file_name);
     while (file >> center >> radius) {
-        scene.push_back(new Sphere(center, radius));
+        scene.push_back(new Sphere(center, radius, new lambartian(Vector3(1.0, 1.0, 1.0))));
     }
     return scene;
 } // read_scene_from_file
@@ -68,7 +64,7 @@ int main() {
     std::cout << "P3\n" << nx << " " << ny << "\n255\n";
 
     // Number of random samples for each pixel.
-    int ns = 100;   
+    int ns = 300;
 
     // Holds position of the camera and the viewing screen.
     Camera camera;

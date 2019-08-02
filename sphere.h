@@ -5,11 +5,12 @@
 // The sphere object is characterized by only its center and its radius.
 class Sphere : public Object {
     public:
-        Sphere(const Vector3& center, float radius, float diffuse = 1.0, float reflection = 0.0, float refraction = 0.0, float opacity = 1.0){
+        Sphere(const Vector3& center, float radius, surface *material){
             m_center=center;
             m_radius=radius;
-            m_surface = surface(diffuse, reflection, refraction, opacity);
+            m_surface = material;
         }
+
         virtual bool hit(const Ray& ray, float t_min, float t_max, hit_record& rec) const;
 
     private:
@@ -50,7 +51,7 @@ bool Sphere::hit(const Ray& ray, float t_min, float t_max, hit_record& rec) cons
             rec.t      = t1;
             rec.point  = ray.point_at_parameter(t1);
             rec.normal = (rec.point - m_center) / m_radius; // Make sure it is unit length by dividing by radius
-            rec.surface_settings = m_surface;
+            rec.surface_ptr = m_surface;
             return true;
         }
 
@@ -59,7 +60,7 @@ bool Sphere::hit(const Ray& ray, float t_min, float t_max, hit_record& rec) cons
             rec.t      = t2;
             rec.point  = ray.point_at_parameter(t2);
             rec.normal = (rec.point - m_center) / m_radius; // Make sure it is unit length by dividing by radius
-            rec.surface_settings = m_surface;
+            rec.surface_ptr = m_surface;
             return true;
         }
     }
