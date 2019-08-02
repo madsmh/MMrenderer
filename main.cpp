@@ -25,13 +25,13 @@ Vector3 color(const Ray &ray, const Scene& scene, int depth) {
     // We only want positive parameters t, i.e. intersection in front of the camera.
     float t_min = 0.0;
     float t_max = MAXFLOAT;
-    Vector3 attenuation(1.0, 1.0, 1.0);
+    Vector3 attenuation;
     Ray scattered;
 
     if (scene.hit(ray, t_min, t_max, rec)) {
         if (depth < 50 && rec.surface_ptr->scatter(ray, rec, attenuation, scattered)){
-            return color(scattered, scene, depth+1);
-        } else { return  Vector3(1.0, 1.0, 1.0);}
+            return attenuation*color(scattered, scene, depth+1);
+        } else { return  Vector3(0.0, 0.0, 0.0);}
 
     } else {
         // The ray did not hit an object, so simulate a sky, based on the y-coordinate

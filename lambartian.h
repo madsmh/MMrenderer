@@ -13,9 +13,9 @@ private:
     Vector3 albedo;
 
 public:
-    explicit lambartian(Vector3 a): albedo(a){};
+    explicit lambartian(Vector3 a): albedo(a) {};
 
-    Vector3 randomUnitVector(){
+    Vector3 randomUnitVector() const {
         Vector3 temp;
 
         do {
@@ -24,11 +24,14 @@ public:
         return temp;
     }
 
-    virtual bool scatter(const Ray ray_in, const hit_record& rec, Vector3 attenuation, Ray& scattered ){
+    virtual bool scatter(const Ray& ray_in, const hit_record& rec, Vector3& attenuation, Ray& scattered) const {
         Vector3 target = rec.point + rec.normal + randomUnitVector();
-        scattered = Ray(rec.point, target-rec.point);
+        Vector3 direction = target-rec.point;
+        direction.normalize();
 
-        m_attenuation = attenuation;
+        scattered = Ray(rec.point, direction);
+
+        attenuation = albedo;
         return true;
     }
 

@@ -18,10 +18,9 @@ struct hit_record
 // Abstract class for surface materials.
 
 class surface {
-protected:
-    Vector3 m_attenuation;
+
 public:
-    virtual bool scatter(const Ray& ray_in, const hit_record& record, Vector3 attenuation, Ray& scattered) {};
+    virtual bool scatter(const Ray& ray_in, const hit_record& rec, Vector3& attenuation, Ray& scattered) {};
 
 };
 
