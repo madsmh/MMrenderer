@@ -3,6 +3,14 @@
 #include "ray.h"
 #include "vector3.h"
 
+static inline std::string float_to_string(float arg) {
+    if (arg >= 0.0) {
+        return std::to_string(arg).substr(0,4);
+    } else {
+        return std::to_string(arg).substr(0,5);
+    }
+} // float_to_string
+
 class Camera {
     public:
         Camera()
@@ -27,9 +35,9 @@ class Camera {
         } // move
 
         std::string to_string() const {
-            return std::to_string(m_camera[0]).substr(0,4) + " " +
-                   std::to_string(m_camera[1]).substr(0,4) + " " +
-                   std::to_string(m_camera[2]).substr(0,4);
+            return float_to_string(m_camera[0]) + " " +
+                   float_to_string(m_camera[1]) + " " +
+                   float_to_string(m_camera[2]);
         } // to_string
 
     private:
