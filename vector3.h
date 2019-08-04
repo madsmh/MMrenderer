@@ -123,20 +123,30 @@ class Vector3 {
         return is;
     }
 
-    inline friend Vector3 cross(const Vector3& lhs, const Vector3& rhs) {
+    /*inline friend Vector3 cross(const Vector3& lhs, const Vector3& rhs) {
         double x = lhs[1]*rhs[2] - lhs[2]*rhs[1];
         double y = lhs[2]*rhs[0] - lhs[0]*rhs[2];
         double z = lhs[0]*rhs[1] - lhs[1]*rhs[0];
         return Vector3(x, y, z);
-    }
+    }*/
 
-    inline friend double dot(const Vector3& lhs, const Vector3& rhs) {
+    /*inline friend double dot(const Vector3& lhs, const Vector3& rhs) {
         return lhs[0]*rhs[0]+lhs[1]*rhs[1]+lhs[2]*rhs[2];
     }
-
+*/
     inline friend Vector3 unit_vector(const Vector3& arg) {
         return arg / arg.norm();
     }
 
 }; // class Vector3
 
+inline Vector3 cross(const Vector3& lhs, const Vector3& rhs) {
+    double x = lhs[1]*rhs[2] - lhs[2]*rhs[1];
+    double y = lhs[2]*rhs[0] - lhs[0]*rhs[2];
+    double z = lhs[0]*rhs[1] - lhs[1]*rhs[0];
+    return Vector3(x, y, z);
+}
+
+inline double dot(const Vector3& lhs, const Vector3& rhs) {
+    return lhs[0]*rhs[0]+lhs[1]*rhs[1]+lhs[2]*rhs[2];
+}

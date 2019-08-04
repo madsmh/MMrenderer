@@ -9,7 +9,7 @@ class Camera {
             : m_lower_left_corner (Vector3(-2.0, -1.0, -1.0)),
               m_horizontal        (Vector3( 4.0,  0.0,  0.0)),
               m_vertical          (Vector3( 0.0,  2.0,  0.0)),
-              m_camera            (Vector3( 0.0,  0.0,  0.0)) {}
+              m_camera            (Vector3( 1,  0.0,  2.0)) {}
 
         // This returns a ray given by the horizontal and vertical fractional coordinates.
         // Both u and v must be in the range [0, 1].

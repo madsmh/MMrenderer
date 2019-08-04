@@ -1,35 +1,43 @@
 #include <iostream>
 #include <fstream>
 #include <string>
-#include <stdlib.h>
+#include <cstdlib>
+#include <random>
 #include "vector3.h"
 #include "ray.h"
 #include "scene.h"
 #include "sphere.h"
 #include "camera.h"
+#include "surfaces.h"
 
 // Define some convenient constants
 const Vector3 color_white = Vector3(1.0, 1.0, 1.0);
 const Vector3 color_blue  = Vector3(0.5, 0.7, 1.0);
 const Vector3 color_red   = Vector3(1.0, 0.0, 0.0);
 
+
+
+
 // Calculates the color associated with this particular ray.
-Vector3 color(const Ray& ray, const Scene& scene) {
+Vector3 color(const Ray &ray, const Scene& scene, int depth) {
     hit_record rec;
 
     // We only want positive parameters t, i.e. intersection in front of the camera.
-    float t_min = 0.0;
+    float t_min = 0.001;
     float t_max = MAXFLOAT;
+    Vector3 attenuation;
+    Ray scattered;
 
     if (scene.hit(ray, t_min, t_max, rec)) {
-        // The normal vector has all components in the interval [-1, 1]
-        // Convert linearly to vector where all components are in the interval [0, 1]
-        return 0.5*(rec.normal + Vector3(1.0, 1.0, 1.0));
+        if (depth < 150 && rec.surface_ptr->scatter(ray, rec, attenuation, scattered)){
+            return attenuation*color(scattered, scene, depth+1);
+        } else { return  Vector3(0.0, 0.0, 0.0);}
+
     } else {
         // The ray did not hit an object, so simulate a sky, based on the y-coordinate
         // of the rays direction.
         Vector3 unit_direction = unit_vector(ray.direction());
-        float t = 0.5*(unit_direction.y() + 1.0); // t is in the range [0,1]
+        float t = 0.8*(unit_direction.y() + 1.0); // t is in the range [0,1]
         // Linearly blend between white and blue
         return (1.0-t)*color_white + t*color_blue;
     }
@@ -40,10 +48,16 @@ Scene read_scene_from_file(std::string file_name) {
     Scene         scene;
     Vector3       center;
     float         radius;
+    std::string material;
 
     std::ifstream file(file_name);
-    while (file >> center >> radius) {
-        scene.push_back(new Sphere(center, radius));
+    while (file >> center >> radius >> material) {
+        if (material == "diffuse"){
+            scene.push_back(new Sphere(center, radius, new lambartian(Vector3(0.5, 0.5, 0.5))));
+        } else if (material == "metal"){
+            scene.push_back(new Sphere(center, radius, new metal(Vector3(0.9, 0.9, 0.9))));
+        }
+
     }
     return scene;
 } // read_scene_from_file
@@ -51,12 +65,12 @@ Scene read_scene_from_file(std::string file_name) {
 
 int main() {
     // Size of final image in pixels.
-    int nx = 200;
-    int ny = 100;
+    int nx = 800;
+    int ny = 400;
     std::cout << "P3\n" << nx << " " << ny << "\n255\n";
 
     // Number of random samples for each pixel.
-    int ns = 100;   
+    int ns = 300;
 
     // Holds position of the camera and the viewing screen.
     Camera camera;
@@ -79,7 +93,7 @@ int main() {
                 Ray ray = camera.get_ray(u, v);
 
                 // Calculate the colour of this particular pixel.
-                col += color(ray, scene);
+                col += color(ray, scene,0);
             }
             col /= float(ns);
 
