@@ -29,7 +29,7 @@ Vector3 color(const Ray &ray, const Scene& scene, int depth) {
     Ray scattered;
 
     if (scene.hit(ray, t_min, t_max, rec)) {
-        if (depth < 50 && rec.surface_ptr->scatter(ray, rec, attenuation, scattered)){
+        if (depth < 150 && rec.surface_ptr->scatter(ray, rec, attenuation, scattered)){
             return attenuation*color(scattered, scene, depth+1);
         } else { return  Vector3(0.0, 0.0, 0.0);}
 
@@ -55,7 +55,7 @@ Scene read_scene_from_file(std::string file_name) {
         if (material == "diffuse"){
             scene.push_back(new Sphere(center, radius, new lambartian(Vector3(0.5, 0.5, 0.5))));
         } else if (material == "metal"){
-            scene.push_back(new Sphere(center, radius, new metal(Vector3(0.5, 0.5, 0.5))));
+            scene.push_back(new Sphere(center, radius, new metal(Vector3(0.9, 0.9, 0.9))));
         }
 
     }
