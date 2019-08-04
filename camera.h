@@ -17,16 +17,14 @@ class Camera {
             : m_lower_left_corner (Vector3(-2.0, -1.0, -1.0)),
               m_horizontal        (Vector3( 4.0,  0.0,  0.0)),
               m_vertical          (Vector3( 0.0,  2.0,  0.0)),
-              m_camera            (Vector3( 0.0,  0.0,  0.0)) {}
+              m_camera            (Vector3( 0.0,  0.0,  3.0)) {}
 
         // This returns a ray given by the horizontal and vertical fractional coordinates.
         // Both u and v must be in the range [0, 1].
         Ray get_ray(float u, float v) {
-            // Calculate a position on the viewing screen.
-            Vector3 screen_pos = m_lower_left_corner + u*m_horizontal + v*m_vertical;
-
-            // Calculate a ray from the camera through the position on the viewing screen.
-            return Ray(m_camera, screen_pos - m_camera);
+            // The direction of the ray is entirely determined by the coordinates (u,v), i.e.
+            // the position on the screen.
+            return Ray(m_camera, Vector3(tan(1.0*(u-0.5)), tan(0.5*(v-0.5)), -1.0));
         } // get_ray
 
         void move(const Vector3& delta) {
